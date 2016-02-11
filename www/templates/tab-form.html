@@ -1,0 +1,36 @@
+<ion-view view-title="Form Customer">
+    <ion-content>
+        <div class="container">
+            <form>
+                <div class="list">
+                    <label class="item item-input">
+                        <span class="input-label">Nama</span>
+                        <input type="text" ng-model="form.name">
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Tgl Lahir</span>
+                        <input type="date" ng-model="form.birthdate">
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Jenis Kelamin</span>
+                        <ion-radio ng-model="form.sex" ng-value="1">Laki-Laki</ion-radio>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label"></span>
+                        <ion-radio ng-model="form.sex" ng-value="0">Perempuan</ion-radio>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Foto {{lastPhoto}}</span>
+                        <button class="button" ng-click="getPhoto()">Ambil Foto</button>
+                    </label>
+                    <label class="item">
+                    	<img ng-src="{{lastPhoto}}" style="max-width: 100%">
+                    </label>
+                    <label class="item">
+                        <button class="button button-block button-positive" ng-click="save()">Simpan</button>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
