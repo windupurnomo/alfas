@@ -1,4 +1,4 @@
-<ion-view view-title="Form Customer">
+<ion-view view-title="Form">
     <ion-content>
         <div class="container">
             <form>
@@ -21,9 +21,9 @@
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Foto {{lastPhoto}}</span>
-                        <button class="button" ng-click="getPhoto()">Ambil Foto</button>
+                        <button class="button button-assertive" ng-click="getPhoto()"><i class="icon ion-camera"></i></button>
                     </label>
-                    <label class="item">
+                    <label class="item" ng-if="lastPhoto">
                     	<img ng-src="{{lastPhoto}}" style="max-width: 100%">
                     </label>
                     <label class="item">
