@@ -26,43 +26,42 @@ angular.module('starter.controllers', [])
 
         if (CSV == '') {
             alert("Gagal");
-        console.log('xxxxx: ' + CSV)
             return;
         }
         return CSV;
     }
 
-    function exportData(items){
-    	var exportItemArr = new Array();
-    	for (var i in items) {
-    	    var exportItem = {};
-    	    exportItem["id"] = items[i]["id"];
-    	    exportItem["name"] = items[i]["name"];
-    	    exportItem["sex"] = items[i]["sex"];
-    	    exportItem["birthdate"] = items[i]["birthdate"];
-    	    exportItem["photo"] = items[i]["photo"];
-    	    exportItemArr.push(exportItem);
-    	}
+    function exportData(items) {
+        var exportItemArr = new Array();
+        for (var i in items) {
+            var exportItem = {};
+            exportItem["id"] = items[i]["id"];
+            exportItem["name"] = items[i]["name"];
+            exportItem["sex"] = items[i]["sex"];
+            exportItem["birthdate"] = $filter('date')(items[i]["birthdate"], 'yyyy/MM/dd');
+            exportItem["photo"] = items[i]["photo"];
+            exportItemArr.push(exportItem);
+        }
 
-    	var title = $filter('date')(new Date(), 'yyyyMMdd_HHmmss');
-    	var filename = title + ".csv";
-    	var filePath = cordova.file.dataDirectory;//cordova.file.externalRootDirectory; //this Path created in ionicPlatform.ready
-    	console.log(filePath + filename);
-    	$cordovaFile.createFile(filePath, filename, true).then(function() {
-    	    return $cordovaFile.writeFile(filePath, filename, JSONToCSVConvertor(exportItemArr, title, true), true);
-    	}).then(function(result) {
-    	    alert("export berhasil: " + $rootScope.filePath + filename);
-    	    console.log("export berhasil: " + $rootScope.filePath + filename);
-    	}, function(err) {
-    	    alert(JSON.stringify(err));
-    	});
+        var title = $filter('date')(new Date(), 'yyyyMMdd_HHmmss');
+        var filename = title + ".csv";
+        var filePath = cordova.file.dataDirectory; //cordova.file.dataDirectory;//cordova.file.externalRootDirectory; //this Path created in ionicPlatform.ready
+        console.log(filePath + filename);
+        $cordovaFile.createFile(filePath, filename, true).then(function() {
+            return $cordovaFile.writeFile(filePath, filename, JSONToCSVConvertor(exportItemArr, title, true), true);
+        }).then(function(result) {
+            alert("export berhasil: " + filePath + filename);
+            console.log("export berhasil: " + $rootScope.filePath + filename);
+        }, function(err) {
+            alert(JSON.stringify(err));
+        });
     }
 
 
     $scope.exportItems = function() {
         DataSvc.getAll().then(function (res){
         	exportData(res);
-        })
+        });
     }
 
 
