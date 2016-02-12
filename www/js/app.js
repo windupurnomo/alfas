@@ -10,15 +10,21 @@ var db = null;
 
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'uuid4'])
 
-.run(function($ionicPlatform, $cordovaSQLite) {
+.run(function($ionicPlatform, $cordovaSQLite, $rootScope) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             cordova.plugins.Keyboard.disableScroll(true);
-
+            cordova.getAppVersion.getVersionNumber(function (version) {
+                $rootScope.version = version;
+            });
+            cordova.getAppVersion.getAppName(function (name) {
+                $rootScope.appName = name;
+            });
         }
+
         if (window.StatusBar) {
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
@@ -44,8 +50,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     $stateProvider
 
     // setup an abstract state for the tabs directive
-    .state('tab', {
-    	cache: false,
+        .state('tab', {
+        cache: false,
         url: '/tab',
         abstract: true,
         templateUrl: 'templates/tabs.html',
@@ -55,7 +61,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     // Each tab has its own nav history stack:
 
     .state('tab.dash', {
-    	cache: false,
+        cache: false,
         url: '/dash',
         views: {
             'tab-dash': {
@@ -66,7 +72,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     })
 
     .state('tab.data', {
-    	cache: false,
+            cache: false,
             url: '/data',
             views: {
                 'tab-data': {
@@ -75,19 +81,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
-        .state('tab.datum', {
-        	cache: false,
-            url: '/datum/:id',
+        .state('tab.about', {
+            url: '/about',
             views: {
-                'tab-data': {
-                    templateUrl: 'templates/tab-datum.html',
-                    controller: 'DatumCtrl'
+                'tab-about': {
+                    templateUrl: 'templates/tab-about.html',
+                    controller: 'AboutCtrl'
                 }
             }
         })
 
     .state('tab.form', {
-    	cache: false,
+        cache: false,
         url: '/form/:id',
         views: {
             'tab-form': {

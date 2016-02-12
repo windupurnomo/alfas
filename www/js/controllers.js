@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope, $rootScope, $filter, $cordovaFile, DataSvc) {
+.controller('DashCtrl', function($scope, $rootScope, $filter, $ionicPlatform, $cordovaFile, DataSvc) {
 
     function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
         var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
@@ -45,13 +45,12 @@ angular.module('starter.controllers', [])
 
         var title = $filter('date')(new Date(), 'yyyyMMdd_HHmmss');
         var filename = title + ".csv";
-        var filePath = cordova.file.dataDirectory; //cordova.file.dataDirectory;//cordova.file.externalRootDirectory; //this Path created in ionicPlatform.ready
+        var filePath = cordova.file.dataDirectory;
         console.log(filePath + filename);
         $cordovaFile.createFile(filePath, filename, true).then(function() {
             return $cordovaFile.writeFile(filePath, filename, JSONToCSVConvertor(exportItemArr, title, true), true);
         }).then(function(result) {
             alert("export berhasil: " + filePath + filename);
-            console.log("export berhasil: " + $rootScope.filePath + filename);
         }, function(err) {
             alert(JSON.stringify(err));
         });
@@ -59,10 +58,16 @@ angular.module('starter.controllers', [])
 
 
     $scope.exportItems = function() {
-        DataSvc.getAll().then(function (res){
-        	exportData(res);
+        DataSvc.getAll().then(function(res) {
+            exportData(res);
         });
     }
+
+    $ionicPlatform.ready(function() {
+        DataSvc.count().then(function(n) {
+            $scope.n = n;
+        });
+    })
 
 
 })
@@ -116,17 +121,10 @@ angular.module('starter.controllers', [])
     }
 
     o.loadMore();
-
-    // $scope.$on('$ionicView.enter', function(e) {
-    //     offset = 0;
-    //     o.data = [];
-    //     o.loadMore();
-    // });
-
 })
 
-.controller('DatumCtrl', function($scope, $stateParams, DataSvc) {
-    $scope.chat = DataSvc.get($stateParams.id);
+.controller('AboutCtrl', function($scope) {
+    var o = $scope;
 })
 
 .controller('TabCtrl', function($scope, $state) {

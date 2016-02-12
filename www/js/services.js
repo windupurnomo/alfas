@@ -25,6 +25,16 @@ angular.module('starter.services', [])
 
 .factory('DataSvc', function($cordovaSQLite, $q, uuid4) {
     return {
+    	count: function (){
+    		var q = $q.defer();
+    		var query = "SELECT COUNT(*) as n FROM data";
+    		$cordovaSQLite.execute(db, query, []).then(function (res){
+    			q.resolve(res.rows.item(0).n);
+    		}, function (err){
+    			q.reject(err);
+    		});
+    		return q.promise;
+    	},
         create: function(data) {
             var q = $q.defer();
             var now = new Date().getTime();
@@ -34,7 +44,6 @@ angular.module('starter.services', [])
             var sdata = JSON.stringify(data);
             var query = "INSERT INTO data (id, json, created, edited) VALUES (?,?,?,?)";
             $cordovaSQLite.execute(db, query, [id, sdata, now, now]).then(function(res) {
-                console.log(res);
                 q.resolve(res);
             }, function(err) {
                 console.error(err);
