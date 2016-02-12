@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.zcodegroup.collector" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Collector</name>
+<widget id="com.zcodegroup.kempel" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>Kempel</name>
   <description>
-        Offline form can synchronized
-    </description>
+            Offline form can synchronized
+        </description>
   <author email="wpwindupurnomo@gmail.com" href="http://zcodegroup.com/">
-      Windu Purnomo
-    </author>
+            Windu Purnomo
+        </author>
   <content src="index.html"/>
   <access origin="*"/>
   <preference name="webviewbounce" value="false"/>
@@ -16,6 +16,7 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="AndroidPersistentFileLocation" value="Library"/>
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>

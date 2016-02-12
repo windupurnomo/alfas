@@ -8,14 +8,13 @@
 
 var db = null;
 
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'uuid4'])
 
 .run(function($ionicPlatform, $cordovaSQLite) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-        	console.log('plugins available')
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             cordova.plugins.Keyboard.disableScroll(true);
 
@@ -26,15 +25,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
 
         if (window.sqlitePlugin !== undefined) {
-            db = $cordovaSQLite.openDB({ name: "kempel.db" });
+            db = $cordovaSQLite.openDB("kempel.db");
+            var s = "CREATE TABLE IF NOT EXISTS data (id text primary key, json text, created number, edited number, creator text, editor text)";
+            $cordovaSQLite.execute(db, s);
         } else {
             db = window.openDatabase("kempel.db", "1.0", "Kempel Database", 2 * 1024 * 1024);
-        }
-
-        if (window.cordova){
-        	cordova.getAppVersion.getVersionNumber().then(function (version){
-        		console.log('version', version);
-        	});
         }
 
     });
@@ -49,15 +44,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     $stateProvider
 
     // setup an abstract state for the tabs directive
-        .state('tab', {
+    .state('tab', {
+    	cache: false,
         url: '/tab',
         abstract: true,
-        templateUrl: 'templates/tabs.html'
+        templateUrl: 'templates/tabs.html',
+        controller: 'TabCtrl'
     })
 
     // Each tab has its own nav history stack:
 
     .state('tab.dash', {
+    	cache: false,
         url: '/dash',
         views: {
             'tab-dash': {
@@ -68,6 +66,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     })
 
     .state('tab.data', {
+    	cache: false,
             url: '/data',
             views: {
                 'tab-data': {
@@ -77,6 +76,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             }
         })
         .state('tab.datum', {
+        	cache: false,
             url: '/datum/:id',
             views: {
                 'tab-data': {
@@ -87,7 +87,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         })
 
     .state('tab.form', {
-        url: '/form',
+    	cache: false,
+        url: '/form/:id',
         views: {
             'tab-form': {
                 templateUrl: 'templates/tab-form.html',

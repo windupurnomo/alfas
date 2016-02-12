@@ -1,36 +1,37 @@
 <ion-view view-title="Form">
     <ion-content>
         <div class="container">
-            <form>
-                <div class="list">
-                    <label class="item item-input">
-                        <span class="input-label">Nama</span>
-                        <input type="text" ng-model="form.name">
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">Tgl Lahir</span>
-                        <input type="date" ng-model="form.birthdate">
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">Jenis Kelamin</span>
-                        <ion-radio ng-model="form.sex" ng-value="1">Laki-Laki</ion-radio>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label"></span>
-                        <ion-radio ng-model="form.sex" ng-value="0">Perempuan</ion-radio>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">Foto {{lastPhoto}}</span>
-                        <button class="button button-assertive" ng-click="getPhoto()"><i class="icon ion-camera"></i></button>
-                    </label>
-                    <label class="item" ng-if="lastPhoto">
-                    	<img ng-src="{{lastPhoto}}" style="max-width: 100%">
-                    </label>
-                    <label class="item">
-                        <button class="button button-block button-positive" ng-click="save()">Simpan</button>
-                    </label>
-                </div>
-            </form>
+            <div class="list">
+                <label class="item item-input">
+                    <span class="input-label">Nama</span>
+                    <input type="text" ng-model="form.name">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Tgl Lahir</span>
+                    <input type="date" ng-model="form.birthdate">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Jenis Kelamin</span>
+                    <ion-radio ng-model="form.sex" ng-value="1">Laki-Laki</ion-radio>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label"></span>
+                    <ion-radio ng-model="form.sex" ng-value="0">Perempuan</ion-radio>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Foto</span>
+                    <button class="button button-assertive" ng-click="getPhoto()"><i class="icon ion-camera"></i></button>
+                </label>
+                <label class="item" ng-if="form.photo">
+                    <center>
+                        <img ng-src="{{form.photo}}" style="max-width: 50%">
+                    </center>
+                </label>
+                <label class="item">
+                    <button class="button button-block button-positive" ng-click="save()">Simpan</button>
+                    <!-- <button class="button button-block button-assertive" ng-click="delete()" ng-if="isEdit">Delete</button> -->
+                </label>
+            </div>
         </div>
     </ion-content>
 </ion-view>
