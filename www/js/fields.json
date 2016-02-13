@@ -1,0 +1,74 @@
+[{
+    "title": "Data Konsumen",
+    "fields": [{
+        "name": "name",
+        "label": "Nama",
+        "type": "text"
+    }, {
+        "name": "age",
+        "label": "Umur",
+        "type": "radio",
+        "options": ["18-25", "26-35", ">35"]
+    }, {
+        "name": "job",
+        "label": "Pekerjaan",
+        "type": "radio",
+        "options": ["Karyawan Swasta", "PNS", "Mahasiswa", "Polisi/Tentara", "Wirausaha/Wiraswasta"]
+    }, {
+        "name": "phone",
+        "label": "HP",
+        "type": "text"
+    }, {
+        "name": "cigarete",
+        "label": "Rokok Asal",
+        "type": "radio",
+        "options": ["A Mild", "Class Mild", "GG Mild", "Dunhil Mild", "GG Surya", "Dunhil Filter", "Marlboro"]
+    }]
+}, {
+    "title": "Transaction",
+    "fields": [{
+        "name": "brand",
+        "label": "Brand",
+        "type": "radio",
+        "options": ["D Super MLD 20"]
+    }, {
+        "name": "amount",
+        "label": "Jumlah Pembelian",
+        "type": "radio",
+        "options": ["1", "2", "3"]
+    }]
+}, {
+    "title": "Komentar Rasa",
+    "fields": [{
+        "name": "rasa",
+        "label": "Rasa",
+        "type": "radio",
+        "options": ["Enak", "Halus", "Mantab", "Ringan", "Berat", "Eneg", "Gatal", "Hambar"]
+    }, {
+        "name": "kemasan",
+        "label": "Kemasan",
+        "type": "radio",
+        "options": ["Bagus", "Elegan", "Modern", "Inovatif", "Unik", "Kuno", "Jelek", "Norak/Tua"]
+    }, {
+        "name": "harga",
+        "label": "Harga",
+        "type": "radio",
+        "options": ["Murah", "Mahal", "Pas"]
+    }]
+}, {
+    "title": "SPG",
+    "fields": [{
+        "name": "spg",
+        "label": "Nama SPG",
+        "type": "text"
+    }, {
+        "name": "location",
+        "label": "Lokasi Mobile",
+        "type": "text"
+    }, {
+        "name": "supervisor",
+        "label": "Supervisor",
+        "type": "radio",
+        "options": ["Anton", "Rozak"]
+    }]
+}]

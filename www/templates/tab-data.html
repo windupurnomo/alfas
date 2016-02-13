@@ -3,8 +3,8 @@
         <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="d in data track by $index" type="item-text-wrap" ng-click="goform(d.id)">
                 <img ng-src="{{d.photo}}">
-                <h2>{{d.name}}</h2>
-                <p>{{sexName(d.sex)}}. Usia {{age(d.birthdate)}} tahun</p>
+                <h2>{{d.nama}}</h2>
+                <p>{{d.pekerjaan}}</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
                 <ion-option-button class="button-assertive" ng-click="delete(d.id, $index)">
                     Delete

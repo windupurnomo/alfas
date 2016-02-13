@@ -23,24 +23,43 @@ angular.module('starter.services', [])
     }
 }])
 
-.factory('DataSvc', function($cordovaSQLite, $q, uuid4) {
+.factory('Parser', function() {
     return {
-    	count: function (){
-    		var q = $q.defer();
-    		var query = "SELECT COUNT(*) as n FROM data";
-    		$cordovaSQLite.execute(db, query, []).then(function (res){
-    			q.resolve(res.rows.item(0).n);
-    		}, function (err){
-    			q.reject(err);
-    		});
-    		return q.promise;
-    	},
+        snakeCase: function(description) {
+            var d = description.toLowerCase().trim();
+            return d.replace(' ', '_');
+        },
+        spaceBase: function(snakeCase) {
+            var pieces = str.split("_");
+            for (var i = 0; i < pieces.length; i++) {
+                var j = pieces[i].charAt(0).toUpperCase();
+                pieces[i] = j + pieces[i].substr(1);
+            }
+            return pieces.join(" ");
+        }
+    }
+})
+
+.factory('DataSvc', function($cordovaSQLite, $http, $q, uuid4) {
+    return {
+        fields: function() {
+            return $http.get('js/fields.json');
+        },
+        count: function() {
+            var q = $q.defer();
+            var query = "SELECT COUNT(*) as n FROM data";
+            $cordovaSQLite.execute(db, query, []).then(function(res) {
+                q.resolve(res.rows.item(0).n);
+            }, function(err) {
+                q.reject(err);
+            });
+            return q.promise;
+        },
         create: function(data) {
             var q = $q.defer();
             var now = new Date().getTime();
             var id = uuid4.generate();
             data.id = id;
-            data.birthdate = data.birthdate.getTime();
             var sdata = JSON.stringify(data);
             var query = "INSERT INTO data (id, json, created, edited) VALUES (?,?,?,?)";
             $cordovaSQLite.execute(db, query, [id, sdata, now, now]).then(function(res) {
@@ -55,7 +74,6 @@ angular.module('starter.services', [])
         update: function(data) {
             var q = $q.defer();
             var now = new Date().getTime();
-            data.birthdate = data.birthdate.getTime();
             var sdata = JSON.stringify(data);
             var query = "UPDATE data SET json = ?, created = ?, edited = ? WHERE id = ?";
             $cordovaSQLite.execute(db, query, [sdata, now, now, data.id]).then(function(res) {
@@ -74,19 +92,12 @@ angular.module('starter.services', [])
                 if (res.rows.length > 0) {
                     var json = res.rows.item(0).json;
                     var dj = JSON.parse(json);
-                    var o = {
-                        id: id,
-                        name: dj.name,
-                        birthdate: new Date(dj.birthdate),
-                        sex: dj.sex,
-                        photo: dj.photo
-                    };
-                    q.resolve(o);
-                }else{
-                	q.reject("No result found");
+                    q.resolve(dj);
+                } else {
+                    q.reject("No result found");
                 }
-            }, function (err){
-            	q.reject(err);
+            }, function(err) {
+                q.reject(err);
             });
             return q.promise;
         },
@@ -99,14 +110,7 @@ angular.module('starter.services', [])
                     for (var i = 0; i < res.rows.length; i++) {
                         var json = res.rows.item(i).json;
                         var dj = JSON.parse(json);
-                        var o = {
-                            id: res.rows.item(i).id,
-                            name: dj.name,
-                            birthdate: new Date(dj.birthdate),
-                            sex: dj.sex,
-                            photo: dj.photo
-                        };
-                        result.push(o);
+                        result.push(dj);
                     }
                     q.resolve(result);
                 } else {
@@ -129,14 +133,7 @@ angular.module('starter.services', [])
                     for (var i = 0; i < res.rows.length; i++) {
                         var json = res.rows.item(i).json;
                         var dj = JSON.parse(json);
-                        var o = {
-                            id: res.rows.item(i).id,
-                            name: dj.name,
-                            birthdate: new Date(dj.birthdate),
-                            sex: dj.sex,
-                            photo: dj.photo
-                        };
-                        result.push(o);
+                        result.push(dj);
                     }
                     q.resolve(result);
                 } else {
@@ -149,15 +146,15 @@ angular.module('starter.services', [])
             });
             return q.promise;
         },
-        delete: function (id){
-        	var q = $q.defer();
-        	var query = "DELETE FROM data where id = ?";
-        	$cordovaSQLite.execute(db, query, [id]).then(function (res){
-        		q.resolve();
-        	}, function (err){
-        		q.reject(err);
-        	});
-        	return q.promise;
+        delete: function(id) {
+            var q = $q.defer();
+            var query = "DELETE FROM data where id = ?";
+            $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+                q.resolve();
+            }, function(err) {
+                q.reject(err);
+            });
+            return q.promise;
         }
     }
 });
