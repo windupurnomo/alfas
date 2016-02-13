@@ -1,36 +1,6 @@
 <ion-view view-title="Form">
     <ion-content>
         <div class="container">
-            <!-- <div class="list">
-                <label class="item item-input">
-                    <span class="input-label">Nama</span>
-                    <input type="text" ng-model="form.name" ng-disabled="isEdit">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Tgl Lahir</span>
-                    <input type="date" ng-model="form.birthdate" ng-disabled="isEdit">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Jenis Kelamin</span>
-                    <ion-radio ng-model="form.sex" ng-value="1">Laki-Laki</ion-radio>
-                </label>
-                <label class="item item-input">
-                    <span class="input-label"></span>
-                    <ion-radio ng-model="form.sex" ng-value="0">Perempuan</ion-radio>
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Foto</span>
-                    <button class="button button-assertive" ng-click="getPhoto()"><i class="icon ion-camera"></i></button>
-                </label>
-                <label class="item" ng-if="form.photo">
-                    <center>
-                        <img ng-src="{{form.photo}}" style="max-width: 50%">
-                    </center>
-                </label>
-                <label class="item" ng-if="!isEdit">
-                    <button class="button button-block button-positive" ng-click="save()">Simpan</button>
-                </label>
-            </div> -->
             <div class="list">
                 <div ng-repeat="fi in fields">
                     <div class="item item-divider">
