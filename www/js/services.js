@@ -60,6 +60,7 @@ angular.module('starter.services', [])
             var now = new Date().getTime();
             var id = uuid4.generate();
             data.id = id;
+            data.created = now;
             var sdata = JSON.stringify(data);
             var query = "INSERT INTO data (id, json, created, edited) VALUES (?,?,?,?)";
             $cordovaSQLite.execute(db, query, [id, sdata, now, now]).then(function(res) {
@@ -115,7 +116,6 @@ angular.module('starter.services', [])
                     q.resolve(result);
                 } else {
                     q.reject("No results found");
-                    console.log("No results found");
                 }
             }, function(err) {
                 q.reject(err);

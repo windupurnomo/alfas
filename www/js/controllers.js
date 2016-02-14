@@ -2,6 +2,56 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($scope, $rootScope, $filter, $ionicPlatform, $cordovaFile, DataSvc, Parser) {
 
+    var allData = [];
+    $scope.groupedData = [];
+
+    $scope.exportItems = function() {
+        exportData(allData);
+    }
+
+    $ionicPlatform.ready(function() {
+        DataSvc.getAll().then(function(res) {
+            allData = res;
+            grouped();
+        }, function (err){
+        	console.log(err)
+        });
+
+        DataSvc.count().then(function(n) {
+            $scope.n = n;
+        });
+    });
+
+    var grouped = function() {
+        var dates = [];
+        var temp = undefined;
+        var omzet = 0;
+        for (var i in allData) {
+            var x = allData[i];
+            var dt = new Date(x.created);
+            var ds = $filter('date')(dt, 'yyyyMMdd');
+            if (dates.indexOf(ds) === -1) {
+                dates.push(ds);
+                if (temp) {
+                	$scope.groupedData.push(temp);
+                }
+                temp = {};
+                temp.date = dt;
+                temp.data = [];
+                temp.omzet = 0;
+                temp.data.push(x);
+                temp.omzet += x.jumlah_pembelian*1;
+            } else {
+                temp.data.push(x);
+                temp.omzet += x.jumlah_pembelian*1;
+            }
+        }
+        if (temp) {
+        	$scope.groupedData.push(temp);
+        }
+
+    }
+
     function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
         var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
         var CSV = '';
@@ -40,7 +90,6 @@ angular.module('starter.controllers', [])
         var title = $filter('date')(new Date(), 'yyyyMMdd_HHmmss');
         var filename = title + ".csv";
         var filePath = cordova.file.dataDirectory;
-        console.log(filePath + filename);
         $cordovaFile.createFile(filePath, filename, true).then(function() {
             return $cordovaFile.writeFile(filePath, filename, JSONToCSVConvertor(exportItemArr, title, true), true);
         }).then(function(result) {
@@ -49,19 +98,6 @@ angular.module('starter.controllers', [])
             alert(JSON.stringify(err));
         });
     }
-
-
-    $scope.exportItems = function() {
-        DataSvc.getAll().then(function(res) {
-            exportData(res);
-        });
-    }
-
-    $ionicPlatform.ready(function() {
-        DataSvc.count().then(function(n) {
-            $scope.n = n;
-        });
-    });
 
 })
 
@@ -85,7 +121,6 @@ angular.module('starter.controllers', [])
                 if (o.data.length === 0) o.data = res;
                 else o.data.concat(res);
                 o.still = res.length === 8;
-                console.log(JSON.stringify(res))
                 offset++;
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             }, function(err) {
@@ -201,34 +236,33 @@ angular.module('starter.controllers', [])
     };
 
     var fail = function(err) {
-        console.log(err);
         alert("Data gagal disimpan, " + err);
     };
 
-    var validate = function (){
-    	var requiredFields = [];
-    	for (var i in fieldsOnly){
-    		var x = fieldsOnly[i];
-    		var isExist = false;
-    		for (var j in o.form){
-    			var y = o.form[j];
-    			if (x.name === j && x.required && y === ""){
-    				requiredFields.push(Parser.spaceBase(j));
-    			}else if (x.name === j && y.length > 0){
-    				isExist = true;
-    				break;
-    			}
-    		}
-    		if (!isExist && x.required){
-    			requiredFields.push(Parser.spaceBase(x.name));
-    			if (requiredFields.length > 3) break;
-    		};
-    	};
-    	if (requiredFields.length > 0){
-    		var errs = requiredFields.join(", ");
-    		alert("Fields berikut harus diisi: " + errs);
-    		return false;
-    	}
-    	return true;
+    var validate = function() {
+        var requiredFields = [];
+        for (var i in fieldsOnly) {
+            var x = fieldsOnly[i];
+            var isExist = false;
+            for (var j in o.form) {
+                var y = o.form[j];
+                if (x.name === j && x.required && y === "") {
+                    requiredFields.push(Parser.spaceBase(j));
+                } else if (x.name === j && y.length > 0) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist && x.required) {
+                requiredFields.push(Parser.spaceBase(x.name));
+                if (requiredFields.length > 3) break;
+            };
+        };
+        if (requiredFields.length > 0) {
+            var errs = requiredFields.join(", ");
+            alert("Fields berikut harus diisi: " + errs);
+            return false;
+        }
+        return true;
     }
 });

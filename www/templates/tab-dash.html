@@ -2,10 +2,22 @@
     <ion-content class="padding">
         <center>
             <h2>{{appName}} <small>{{version}}</small></h2>
-            <div style="margin:40px"></div>
+            <div style="margin:30px"></div>
             <h2>{{n}} <br/> <small>total data</small></h2>
-            <div style="margin:40px"></div>
+            <div style="margin:10px"></div>
         </center>
+        <p ng-if="groupedData.length > 0">
+            <div class="dark" style="margin-left:10px">
+                <small><i class="icon ion-ios-people"></i> Jumlah konsumen &nbsp; &nbsp;
+            	<i class="icon ion-ios-cart"></i> Omzet</small>
+            </div>
+            <ion-list>
+                <ion-item ng-repeat="d in groupedData track by $index">
+                    <i class="icon ion-ios-calendar"></i> {{d.date | date:'dd/MM/yyyy'}} &nbsp;&nbsp;&nbsp;
+                    <i class="icon ion-ios-people"></i> {{d.data.length}} &nbsp; &nbsp;<i class="icon ion-ios-cart"></i> {{d.omzet}}
+                </ion-item>
+            </ion-list>
+        </p>
         <p>
             <button class="button button-block button-positive" ng-click="exportItems()">Export CSV</button>
         </p>
