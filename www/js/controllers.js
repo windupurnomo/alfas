@@ -63,15 +63,9 @@ angular.module('starter.controllers', [])
         });
     });
 
-
 })
 
 .controller('DataCtrl', function($scope, $state, $ionicPlatform, $ionicListDelegate, DataSvc) {
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //
 
     var offset = 0,
         o = $scope;
@@ -110,20 +104,8 @@ angular.module('starter.controllers', [])
     o.loadMore();
 })
 
-.controller('AboutCtrl', function($scope) {
-    var o = $scope;
-})
-
 .controller('TabCtrl', function($scope, $state) {
     var o = $scope;
-
-    o.godash = function() {
-        $state.go('tab.dash');
-    }
-
-    o.godata = function() {
-        $state.go('tab.data');
-    }
 
     o.goform = function() {
         $state.go('tab.form', {
@@ -134,7 +116,8 @@ angular.module('starter.controllers', [])
 
 .controller('FormCtrl', function($scope, $state, $stateParams, $ionicPlatform, Camera, DataSvc, Parser, uuid4) {
     var o = $scope,
-        id = $stateParams.id;
+        id = $stateParams.id,
+        fieldsOnly = [];
 
     o.form = {};
     o.isEdit = uuid4.validate(id);
@@ -147,7 +130,9 @@ angular.module('starter.controllers', [])
             var temp = [];
             for (var j in x.fields) {
                 var y = x.fields[j];
+                var reqSign = y.required ? '*' : '';
                 y.name = Parser.snakeCase(y.label);
+                y.label = y.label + reqSign;
                 if (y.type === 'text') {
                     temp.push(y);
                 } else if (y.type === 'radio') {
@@ -173,6 +158,7 @@ angular.module('starter.controllers', [])
                     });
                 }
             }
+            fieldsOnly = fieldsOnly.concat(angular.copy(x.fields));
             var xx = angular.copy(x);
             xx.fields = temp;
             o.fields.push(xx);
@@ -189,8 +175,8 @@ angular.module('starter.controllers', [])
                     o.form = resx;
                 });
             }
-        }, function (res){
-        	console.log(JSON.stringify(res));
+        }, function(res) {
+            console.log(JSON.stringify(res));
         })
     });
 
@@ -202,7 +188,7 @@ angular.module('starter.controllers', [])
 
     o.save = function() {
         var data = angular.copy(o.form);
-        console.log(JSON.stringify(data));
+        if (!validate()) return;
         if (o.isEdit)
             DataSvc.update(data).then(success, fail);
         else
@@ -216,5 +202,33 @@ angular.module('starter.controllers', [])
 
     var fail = function(err) {
         console.log(err);
+        alert("Data gagal disimpan, " + err);
+    };
+
+    var validate = function (){
+    	var requiredFields = [];
+    	for (var i in fieldsOnly){
+    		var x = fieldsOnly[i];
+    		var isExist = false;
+    		for (var j in o.form){
+    			var y = o.form[j];
+    			if (x.name === j && x.required && y === ""){
+    				requiredFields.push(Parser.spaceBase(j));
+    			}else if (x.name === j && y.length > 0){
+    				isExist = true;
+    				break;
+    			}
+    		}
+    		if (!isExist && x.required){
+    			requiredFields.push(Parser.spaceBase(x.name));
+    			if (requiredFields.length > 3) break;
+    		};
+    	};
+    	if (requiredFields.length > 0){
+    		var errs = requiredFields.join(", ");
+    		alert("Fields berikut harus diisi: " + errs);
+    		return false;
+    	}
+    	return true;
     }
 });

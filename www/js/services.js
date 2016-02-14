@@ -30,7 +30,7 @@ angular.module('starter.services', [])
             return d.replace(' ', '_');
         },
         spaceBase: function(snakeCase) {
-            var pieces = str.split("_");
+            var pieces = snakeCase.split("_");
             for (var i = 0; i < pieces.length; i++) {
                 var j = pieces[i].charAt(0).toUpperCase();
                 pieces[i] = j + pieces[i].substr(1);
